@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Tienda Oly</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet" href="../css/styles.css">
+  
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="nav-olly">
+
+<div class="container-fluid">
+
+<div class="d-flex align-items-center justify-content-between">
+
+<!-- LOGO -->
+<div class="d-flex align-items-center gap-3">
+<img src="../assets/img/logo.png" class="logo" onclick="window.location.href='../index.html'">
+<span class="nombre-tienda">Tienda Oly</span>
+</div>
+
+<!-- BUSCADOR -->
+<form class="buscador-wrapper d-none d-md-flex">
+<input type="text" class="buscador-input" placeholder="Buscar productos..." id="buscador">
+
+<button class="btn-buscar">
+<i class="bi bi-search"></i>
+</button>
+</form>
+
+<!-- CUENTA -->
+<div class="user-box">
+  <button class="user-trigger" onclick="window.location.href='./login.html'">
+  <i class="bi bi-person-circle"></i>
+  Iniciar sesión <strong>Cuenta</strong>
+  </button>
+</div>
+
+</div>
+</div>
+</header>
+
+<!-- SUBNAV -->
+<div class="subnav" style="max-width:100% !important; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+
+  <div class="dropdown">
+    <button class="btn-categorias" id="btnCat">
+      <i class="bi bi-list-ul"></i> Todas las categorías 
+      <span id="caret"><i class="bi bi-caret-down"></i></span>
+    </button>
+
+    <div class="dropdown-menu" id="menuCat">
+      <ul id="categories-list">
+      </ul>
+    </div>
+  </div>
+
+
+
+  <span style="margin:0 8px;">|</span>
+
+  <a href="../index.html">Inicio</a>
+  <a href="./products.html">Catálogo</a>	
+  <a href="./contact.html">Contacto</a>
+  <a href="./about.html">Sobre Nosotros</a>
+
+</div>
+
+<section class="container my-5">
+
+  <div class="row">
+
+    <!-- FILTROS -->
+    <aside class="col-lg-3 mb-4">
+
+      <h5 class="mb-3">Categorías</h5>
+
+      <ul id="filtro-categorias" class="list-group">
+      </ul>
+
+    </aside>
+
+    <!-- PRODUCTOS -->
+    <div class="col-lg-9">
+
+      <div id="catalogo-grid" class="row g-4">
+      </div>
+
+      <!-- PAGINACIÓN -->
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center" id="paginacion"></ul>
+      </nav>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src ="../js/products.js"></script>
+<script src ="../js/subnavbar-categories.js"></script>
+<script src ="../js/navbar-search.js"></script>
+</body>
+</html>

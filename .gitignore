@@ -1,0 +1,7 @@
+### dotenv ###
+.env
+### node ###
+node_modules/
+### Logs y temporales ###
+*.log
+.DS_Store

@@ -41,32 +41,3 @@ function renderBadgeHTML(prod) {
     </span>
   `;
 }
-
-import { getCarrito } from "./cart.js";
-
-export function actualizarCarritoUI() {
-  const carrito = getCarrito();
-
-  const countEl = document.querySelector(".cart-count");
-  const totalEl = document.querySelector(".cart-total");
-
-  let totalItems = 0;
-  let totalPrecio = 0;
-
-  carrito.forEach(item => {
-    totalItems += item.cantidad;
-    totalPrecio += item.precio_unitario * item.cantidad;
-  });
-
-  if (totalItems > 9) {
-    countEl.textContent = "+9";
-  } else {
-    countEl.textContent = totalItems;
-  }
-
-  if (totalPrecio > 99999) {
-    totalEl.textContent = "$+99999";
-  } else {
-    totalEl.textContent = `$${totalPrecio.toFixed(2)}`;
-  }
-}

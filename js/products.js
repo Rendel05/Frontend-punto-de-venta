@@ -54,11 +54,11 @@ async function cargarCatalogo(){
     card.innerHTML = `
       <div class="card product-card h-100 shadow-sm">
 
-        <img src="${imagen}" class="card-img-top">
+        <img src="${imagen}" class="card-img-top product-clickable">
 
         <div class="card-body d-flex flex-column">
 
-          <h6>${prod.nombre}</h6>
+          <h6 class="product-clickable">${prod.nombre}</h6>
 
           <p class="small text-muted flex-grow-1">
             ${prod.descripcion}
@@ -81,9 +81,13 @@ async function cargarCatalogo(){
 
       </div>
     `;
-      card.onclick = () => {
+
+    card.querySelectorAll('.product-clickable').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.onclick = () => {
         window.location.href = `./product.html?id=${prod.producto_id}`;
-      }
+      };
+});
     grid.appendChild(card);
 
   });

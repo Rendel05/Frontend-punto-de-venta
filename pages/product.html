@@ -22,6 +22,7 @@
 <link rel="manifest" href="../assets/favicon/site.webmanifest">
 </head>
 
+
 <body>
 
 <!-- NAVBAR -->
@@ -108,7 +109,7 @@
       <img id="producto-img" src="../assets/img/default.png" class="img-fluid rounded shadow-sm" alt="Producto" style="max-height: 500px; object-fit: contain;">
     </div>
 
-    <aside class="col-md-6 product-info">
+    <aside class="col-md-6 product-info" id="producto-card" data-product="">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="products.html">Catálogo</a></li>
@@ -131,7 +132,9 @@
       </div>
 
       <div class="d-grid gap-2 d-md-block">
-        <button class="btn btn-primary btn-lg px-5">Agregar al carrito</button>
+        <div data-cart-zone>
+            
+        </div>
       </div>
     </aside>
   </div>
@@ -224,6 +227,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../helpers/ui.js"></script>
 <script src="../js/product.js"></script>
+<script src="../js/cart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src ="../js/subnavbar-categories.js"></script>
 <script src ="../js/navbar-search.js"></script>

@@ -33,24 +33,33 @@ function renderProducto(p) {
     document.getElementById("producto-nombre").textContent = p.nombre;
     document.getElementById("producto-descripcion").textContent = p.descripcion;
 
-const precioContainer = document.getElementById("producto-precio");
+    const precioContainer = document.getElementById("producto-precio");
+    if (p.tiene_oferta) {
+        precioContainer.innerHTML = `
+            <span class="precio-original">$${parseFloat(p.precio_venta).toLocaleString()}</span>
+            <span class="precio-oferta">$${parseFloat(p.precio_final).toLocaleString()}</span>
+        `;
+    } else {
+        precioContainer.innerHTML = `
+            <span class="precio-normal">$${parseFloat(p.precio_venta).toLocaleString()}</span>
+        `;
+    }
 
-if (p.tiene_oferta) {
-  precioContainer.innerHTML = `
-    <span class="precio-original">$${parseFloat(p.precio_venta).toLocaleString()}</span>
-    <span class="precio-oferta">$${parseFloat(p.precio_final).toLocaleString()}</span>
-  `;
-} else {
-  precioContainer.innerHTML = `
-    <span class="precio-normal">$${parseFloat(p.precio_venta).toLocaleString()}</span>
-  `;
-}
     document.getElementById("producto-stock").textContent = `Stock disponible: ${p.stock} unidades`;
     document.getElementById("producto-categoria").textContent = p.categoria_nombre || "General";
-    
+
     if (p.imagen_url) {
         document.getElementById("producto-img").src = p.imagen_url;
     }
+
+    registrarProductos([p]);
+
+    const card = document.getElementById("producto-card");
+    if (card) card.dataset.product = p.producto_id;
+
+    const zona = card?.querySelector("[data-cart-zone]");
+    if (zona) zona.innerHTML = renderBotonCantidad(p);
+
 }
 
 
@@ -68,6 +77,7 @@ async function cargarResenas(id) {
         console.error("Error cargando reseñas:", error);
     }
 }
+
 function renderReviews(reviews) {
     const container = document.getElementById("reviews-container");
     const currentUser = getUserFromToken();

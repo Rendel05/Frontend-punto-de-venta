@@ -127,38 +127,41 @@ async function cargarProductos(){
       const card = document.createElement("div")
 
       card.className = "card product-card shadow-sm"
-      card.dataset.product = prod.producto_id;
+card.dataset.product = prod.producto_id;
 
-      card.innerHTML = `
-        <img src="${imagen}" class="card-img-top" alt="${prod.nombre}">
+card.innerHTML = `
+  <img src="${imagen}" class="card-img-top product-clickable" alt="${prod.nombre}">
 
-        <div class="card-body d-flex flex-column">
+  <div class="card-body d-flex flex-column">
 
-          <h6 class="card-title">${prod.nombre}</h6>
+    <h6 class="card-title">${prod.nombre}</h6>
 
-          <p class="text-muted small flex-grow-1">
-            ${prod.descripcion || ""}
-          </p>
+    <p class="text-muted small flex-grow-1">
+      ${prod.descripcion || ""}
+    </p>
 
-          <div class="d-flex justify-content-between align-items-center gap-2">
+    <div class="d-flex justify-content-between align-items-center gap-2">
 
-            <div class="product-price">
-              ${renderPrecioHTML(prod)}
-            </div>
-            ${renderBadgeHTML(prod)}
+      <div class="product-price">
+        ${renderPrecioHTML(prod)}
+      </div>
+      ${renderBadgeHTML(prod)}
 
-            <div data-cart-zone>
-              ${renderBotonCantidad(prod)}
-            </div>
+      <div data-cart-zone>
+        ${renderBotonCantidad(prod)}
+      </div>
 
-          </div>
+    </div>
 
-        </div>
-      `
+  </div>
+`
 
-      card.onclick = () => {
-        window.location.href = `./pages/product.html?id=${prod.producto_id}`;
-      }
+
+    const img = card.querySelector('.product-clickable');
+
+    img.onclick = () => {
+      window.location.href = `./pages/product.html?id=${prod.producto_id}`;
+    };
 
       contenedor.appendChild(card)
 

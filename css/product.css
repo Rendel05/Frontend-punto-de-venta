@@ -24,3 +24,25 @@
     font-size: 0.9rem;
   }
 }
+#producto-card .btn-add {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1.1rem;
+}
+
+#producto-card .cart-qty-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+#producto-card .qty-value {
+  font-size: 1.25rem;
+}
+
+#producto-card .stock-max-msg {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+}

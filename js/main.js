@@ -42,6 +42,69 @@ async function cargarCategorias(){
 
 }
 
+async function cargarHeroOferta(){
+
+  const URL = "https://backend-punto-de-venta-render.onrender.com/api/offers/active";
+
+  try{
+
+    const res = await fetch(URL);
+    const ofertas = await res.json();
+
+    if(!ofertas.length) return;
+
+    const randomIndex = Math.floor(Math.random() * ofertas.length);
+    const oferta = ofertas[randomIndex];
+    const descuento = Math.round(
+      100 - (oferta.precio_oferta / oferta.precio_venta) * 100
+    );
+    renderHero(oferta,descuento);
+
+  }catch(err){
+    console.error("Error cargando ofertas:", err);
+  }
+
+}
+
+
+function renderHero(oferta,descuento) {
+  const hero = document.getElementById("hero");
+
+  const imagen = oferta.imagen_url || "./assets/img/default.png";
+
+  hero.innerHTML = `
+  <div class="hero-container d-flex align-items-center justify-content-between">
+
+    <div class="hero-content">
+
+      <p class="hero-eyebrow">Oferta del día</p>
+
+      <h1 class="hero-title">${oferta.nombre}</h1>
+
+      <p class="hero-pricing">
+        <span class="price-original">$${oferta.precio_venta}</span>
+        <strong class="price-offer">$${oferta.precio_oferta}</strong>
+        <span class="badge-offer">${descuento}% OFF</span>
+      </p>
+
+      <div class="hero-actions">
+        <a href="./pages/product.html?id=${oferta.producto_id}" class="btn hero-btn">
+          Ver producto
+        </a>
+
+        <a href="./pages/products.html" class="btn hero-btn-secondary">
+          Ver más ofertas
+        </a>
+      </div>
+
+    </div>
+
+    <img src="${imagen}" alt="${oferta.nombre}" class="hero-image">
+
+  </div>
+`;
+}
+
 
 async function cargarProductos(){
 
@@ -58,8 +121,7 @@ async function cargarProductos(){
 
     productos.slice(0,10).forEach(prod => {
 
-      const imagen = `assets/img/logo.png`
-
+      const imagen = prod.imagen_url || "./assets/img/default.png";
       const card = document.createElement("div")
 
       card.className = "card product-card shadow-sm"
@@ -77,9 +139,10 @@ async function cargarProductos(){
 
           <div class="d-flex justify-content-between align-items-center">
 
-            <span class="product-price">
-              $${prod.precio_venta}
-            </span>
+            <div class="product-price">
+              ${renderPrecioHTML(prod)}
+            </div>
+            ${renderBadgeHTML(prod)}
 
             <button class="btn btn-sm btn-primary">
               +
@@ -89,6 +152,10 @@ async function cargarProductos(){
 
         </div>
       `
+
+      card.onclick = () => {
+        window.location.href = `./pages/product.html?id=${prod.producto_id}`;
+      }
 
       contenedor.appendChild(card)
 
@@ -104,7 +171,7 @@ async function cargarProductos(){
 
 async function cargarOfertas(){
 
-  const URL_OFERTAS = "https://backend-punto-de-venta-render.onrender.com/api/active"
+  const URL_OFERTAS = "https://backend-punto-de-venta-render.onrender.com/api/offers/active"
 
   try{
 
@@ -117,7 +184,7 @@ async function cargarOfertas(){
 
     ofertas.slice(0,8).forEach(oferta => {
 
-      const imagen = "assets/img/logo.png"
+      const imagen = oferta.imagen_url || "./assets/img/default.png";
 
       const card = document.createElement("div")
 
@@ -148,7 +215,9 @@ async function cargarOfertas(){
 
         </div>
       `
-
+      card.onclick = () => {
+        window.location.href = `./pages/product.html?id=${oferta.producto_id}`;
+      }
       contenedor.appendChild(card)
 
     })
@@ -177,8 +246,7 @@ async function cargarCategoriasHome(){
     contenedor.innerHTML = "";
 
     categorias.forEach(cat => {
-
-      const imagen = `./assets/img/${cat.nombre}.webp`;
+      const imagen = `./assets/img/${cat.nombre} (1).jpg`;
 
       const card = document.createElement("div");
 
@@ -209,7 +277,7 @@ async function cargarCategoriasHome(){
   }
 
 }
-
+cargarHeroOferta();
 cargarCategoriasHome();
 cargarOfertas();
 cargarProductos();

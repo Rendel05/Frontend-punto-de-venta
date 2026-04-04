@@ -1,4 +1,4 @@
-const API_URL = "https://backend-punto-de-venta-render.onrender.com/api/categories";
+const API_URL_CATS = "https://backend-punto-de-venta-render.onrender.com/api/categories";
 
 const btn = document.getElementById("btnCat");
 const menu = document.getElementById("menuCat");
@@ -15,7 +15,7 @@ async function cargarCategorias(){
 
   try{
 
-    const res = await fetch(API_URL);
+    const res = await fetch(API_URL_CATS);
     const categorias = await res.json();
 
     const lista = document.getElementById("categories-list");

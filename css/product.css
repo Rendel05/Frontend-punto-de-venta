@@ -1,0 +1,26 @@
+@media (max-width: 767px) {
+  .product-card {
+    min-width: unset;
+  }
+
+  .product-card img {
+    height: 130px; 
+  }
+
+  .product-card .card-body {
+    padding: 8px;
+  }
+
+  .product-card h6 {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  .product-card p.small {
+    display: none;
+  }
+
+  .product-price {
+    font-size: 0.9rem;
+  }
+}

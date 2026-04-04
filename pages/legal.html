@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Tienda Oly</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/header.css">
+<link rel="stylesheet" href="../css/footer-styles.css">
+<link rel="stylesheet" href="../css/dynamic-pages.css">
+<script src="../js/session-customer.js"></script>
+ 
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="nav-olly">
+
+<div class="container-fluid">
+
+<div class="d-flex align-items-center justify-content-between">
+
+<!-- LOGO -->
+<div class="d-flex align-items-center gap-3">
+<img src="../assets/img/logo.png" class="logo" onclick="window.location.href='../index.html'">
+<span class="nombre-tienda">TiendaOly.com</span>
+</div>
+
+<!-- BUSCADOR -->
+<form class="buscador-wrapper d-md-flex">
+<input type="text" class="buscador-input" placeholder="Buscar productos..." id="buscador">
+
+<button class="btn-buscar">
+<i class="bi bi-search"></i>
+</button>
+</form>
+
+<!-- CUENTA -->
+<div id="login" class="user-box">
+  <button class="btn-user" id="user-btn">
+    <i class="bi bi-person-circle icon"></i>
+    <span class="detail" id="user-detail">Iniciar sesión</span>
+    <span class="detail2" id="user-detail2">Login</span>
+  </button>
+
+  <div class="user-menu" id="user-menu"></div>
+</div>
+
+<!-- CARRITO -->
+<div id="carrito">
+  <button class="btn-cart">
+
+    <div class="cart-icon-wrapper">
+      <i class="bi bi-cart4 icon"></i>
+      <span class="cart-count">0</span>
+    </div>
+
+    <span class="cart-total">$0.00</span>
+
+  </button>
+</div>
+
+</div>
+</div>
+</header>
+
+<!-- SUBNAV -->
+<div class="subnav" style="max-width:100% !important; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+
+  <div class="dropdown">
+    <button class="btn-categorias" id="btnCat">
+      <i class="bi bi-list-ul"></i> Todas las categorías 
+      <span id="caret"><i class="bi bi-caret-down"></i></span>
+    </button>
+
+    <div class="dropdown-menu" id="menuCat">
+      <ul id="categories-list">
+      </ul>
+    </div>
+  </div>
+
+
+
+  <span style="margin:0 8px;">|</span>
+
+  <a href="../index.html">Inicio</a>
+  <a href="./products.html">Catálogo</a>	
+  <a href="./contact.html">Contacto</a>
+  <a href="./about.html">Sobre Nosotros</a>
+
+</div>
+
+
+<main class="container-dynamic-content" id="legal-page">
+
+
+</main>
+
+
+<footer class="footer-olly text-white mt-5">
+  <div class="container">
+
+    <div class="row text-start">
+
+      <div class="col-md-6 mb-4">
+        <h5 class="fw-bold mb-3">
+          Contacto
+        </h5>
+        <p class="m-0">
+            📌 Dirección: Calle Mexico-Tampico, col Cantores, 43000 — Huejutla de Reyes, Hidalgo, México.<br>
+            📞 Teléfono: 7713403691<br>
+            ✉ Correo: contacto@tiendaoly.com<br>
+            🕒 Horario: 8:00 AM – 6:00 PM
+        </p>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <h5 class="fw-bold mb-3">
+          Enlaces
+        </h5>
+
+        <ul id="footer-links">
+          <li><a href="../index.html">Inicio</a></li>
+          <li><a href="./products.html">Productos</a></li>
+          <li><a href="./contact.html">Contacto</a></li>
+          <li><a href="./about.html">Sobre Nosotros</a></li>
+          <li><a href="#">Información legal</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr class="border-secondary">
+
+    <div class="text-center mt-3">
+
+      <div class="d-flex justify-content-center gap-3 mb-3">
+
+        <a href="https://www.instagram.com/" class="icono-redes">
+        <i class="bi bi-instagram"></i>
+        </a>
+
+        <a href="https://www.facebook.com/" class="icono-redes">
+          <i class="bi bi-facebook"></i>
+        </a>
+
+        <a href="https://github.com/Rendel05" class="icono-redes">
+          <i class="bi bi-github"></i>
+        </a>
+
+      </div>
+
+      <small id="footer-copy">
+        © 2026 Tienda Oly — Todos los derechos reservados.<br>
+        Sitio de demostración. NO INGRESAR DATOS REALES.
+      </small>
+    </div>
+
+  </div>
+</footer>
+
+
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  renderUserBox();
+});
+</script>
+<script src ="../js/legal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src ="../js/subnavbar-categories.js"></script>
+<script src ="../js/navbar-search.js"></script>
+</body>
+</html>

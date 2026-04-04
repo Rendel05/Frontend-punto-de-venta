@@ -1,9 +1,4 @@
 const form = document.getElementById("loginForm");
-const token = localStorage.getItem("token");
-
-if (token) {
-  window.location.href = "./admin.html";
-}
 
 form.addEventListener("submit", async (e) => {
 
@@ -19,10 +14,7 @@ form.addEventListener("submit", async (e) => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        nickname,
-        password
-      })
+      body: JSON.stringify({ nickname, password })
     });
 
     const data = await res.json();
@@ -31,18 +23,25 @@ form.addEventListener("submit", async (e) => {
 
       localStorage.setItem("token", data.token);
 
-      window.location.href = "./admin.html";
+      const payload = JSON.parse(atob(data.token.split('.')[1]));
+
+      switch (payload.rol) {
+        case "Admin":
+          window.location.href = "./admin.html";
+          break;
+        case "Cajero":
+          window.location.href = "./cashier.html";
+          break;
+        default:
+          window.location.href = "../index.html";
+      }
 
     } else {
-
       document.getElementById("loginMsg").textContent = data.message;
-
     }
 
-  } catch (error) {
-
+  } catch {
     document.getElementById("loginMsg").textContent = "Error de conexión";
-
   }
 
 });

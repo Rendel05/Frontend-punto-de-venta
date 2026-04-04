@@ -1,0 +1,187 @@
+/* NAVBAR */
+.nav-olly{
+  background:var(--orange);
+  padding:14px 20px;
+}
+
+.logo{
+  width:60px;
+  transition:transform .2s;
+}
+
+.logo:hover{
+  transform:scale(1.15);
+}
+
+.nombre-tienda{
+  color:var(--bg);
+  font-weight:bold;
+  font-size:20px;
+  margin-right:10px;
+}
+
+/* BUSCADOR */
+.buscador-wrapper{
+  position:relative;
+  width:100%;
+  max-width:1300px;
+}
+
+.buscador-input{
+  width:100%;
+  border:none;
+  border-radius:40px;
+  padding:10px 40px 10px 15px;
+}
+
+.btn-buscar{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  border:none;
+  background:none;
+}
+
+/* ICONOS Y TEXTO */
+.icon{
+  font-size:25px;
+  color: var(--bg);
+  font-weight:bold;
+}
+
+.detail{
+  margin-left:5px;
+  font-size: 100%;
+  color: var(--bg);
+  font-weight:bold;	
+}
+
+.detail2{
+  font-size:12px; 
+  font-weight:bold; 
+  color:var(--bg)
+}
+
+/* BOTONES */
+.btn-user{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background-color: transparent;
+  border:none;
+  cursor:pointer;
+}
+.btn-user.active {
+  background-color: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.2s ease-in-out;
+}
+.btn-user.active {
+  transform: scale(0.97);
+}
+
+.btn-cart{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background-color: transparent;
+  border:none;
+}
+
+/* CARRITO */
+.cart-icon-wrapper{
+  position: relative;
+  display:inline-block;
+}
+
+.cart-count{
+  position:absolute;
+  top:-1px;
+  right:-3px;
+  background-color:var(--bg);
+  border-radius:50px;
+  font-size:10px;
+  height:15px;
+  width:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+}
+
+.cart-total{
+  margin-top:-5px;
+  font-size:12px;
+  font-weight:bold;
+  color:var(--bg);
+}
+
+/* USER MENU */
+.user-box{
+  position: relative;
+}
+
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+  min-width: 180px;
+  display: none;
+  z-index: 1000;
+}
+.user-menu.show {
+  display: block;
+}   
+
+.user-menu a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.user-menu a:hover {
+  background: #f5f5f5;
+  color: var(--orange);
+}
+
+/* RESPONSIVE NAVBAR */
+@media (max-width:768px){
+
+  .nombre-tienda{
+    display: none;
+  }
+
+  .detail{
+    display:none;
+  }
+
+  .nav-olly{
+    padding:14px 5px;
+  }
+
+  .detail2{
+    margin-top:-5px;
+  }
+}
+
+@media (min-width:769px){
+
+  .detail2{
+    display: none;
+  }
+
+  .btn-user{
+    flex-direction:row;
+    gap:5px;
+    min-width:170px;
+    max-width: 200px;
+  }
+}

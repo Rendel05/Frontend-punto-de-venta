@@ -1,20 +1,50 @@
-export function checkAuth() {
+export function getToken() {
+  return localStorage.getItem("token");
+}
 
-  const token = localStorage.getItem("token");
+export function getPayload() {
+  const token = getToken();
 
-  if (!token) {
-    window.location.href = "../login.html";
+  if (!token) return null;
+
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+}
+
+export function getRole() {
+  const payload = getPayload();
+  return payload ? payload.rol : null;
+}
+
+export function requireAuth(rolEsperado) {
+
+  const payload = getPayload();
+
+  if (!payload) {
+    window.location.href = "./login.html";
+    return;
+  }
+
+  if (rolEsperado && payload.rol !== rolEsperado) {
+    window.location.href = "./login.html";
   }
 
 }
 
-export function logout() {
-
-  localStorage.removeItem("token");
-  window.location.href = "../login.html";
-
+export function getNickname() {
+  const payload = getPayload();
+  return payload ? payload.nickname : null;
 }
 
-export function getToken() {
-  return localStorage.getItem("token");
+export function getUserId() {
+  const payload = getPayload();
+  return payload ? payload.id : null;
+}
+
+export function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "./login.html";
 }

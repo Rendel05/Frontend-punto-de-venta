@@ -7,18 +7,55 @@
 <title>Panel Admin</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="../css/admin.css">
+<script src="https://cdn.tiny.cloud/1/i7lemtqouo2i1wn8r5wq9l0w64qjiqa4u56o4xdoa6cmjep0/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+<script type="module">
+  import { requireAuth, logout,getNickname } from "../js/auth.js";
+
+  requireAuth("Admin");
+    const name = getNickname();
+
+  if (name) {
+    document.getElementById("user").textContent =
+      `${name}`;
+  }
+
+  document.getElementById("logout")
+    .addEventListener("click", logout);
+</script>
 
 </head>
 
 <body>
 
-<header class="navbar navbar-dark bg-dark px-3">
-  <span class="navbar-brand mb-0 h1">Panel Admin</span>
+<header class="navbar navbar-dark bg-dark px-3 flex-wrap">
 
-  <button id="logout" class="btn btn-danger btn-sm">
-    Cerrar sesión
+  <div class="d-flex align-items-center flex-grow-1" style="min-width: 0;">
+    
+    <button class="btn btn-outline-light d-md-none me-2" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <span class="navbar-brand mb-0 h1 d-flex align-items-center">
+      <img src="../assets/img/logo.png" style="width: 4rem; margin-right: 1rem;">
+      <span style="white-space: normal;">
+        Panel de consulta para Administradores
+      </span>
+    </span>
+
+  </div>
+
+  <button id="logout" class="btn btn-danger btn-sm mt-2 mt-md-0">
+    <i class="bi bi-x-octagon"></i> Cerrar sesión
   </button>
+
 </header>
 
 
@@ -26,14 +63,16 @@
   <div class="row">
 
     <!-- SIDEBAR -->
-    <aside class="col-md-2 sidebar">
+    <aside class="col-md-2 sidebar" id="sidebar">
 
       <nav class="nav flex-column">
-
-        <a class="nav-link" data-route="dashboard">📊 Dashboard</a>
-        <a class="nav-link" data-route="productos">📦 Productos</a>
-        <a class="nav-link" data-route="categorias">🧺 Categorías</a>
-        <a class="nav-link" data-route="usuarios">👤 Usuarios</a>
+        <p style="color: white;">Sesión iniciada como <strong><span id="user"></span></strong></p>
+        <a class="nav-link" data-route="dashboard"> <i class="bi bi-bar-chart-line"></i> Dashboard</a>
+        <a class="nav-link" data-route="productos"><i class="bi bi-box-seam"></i> Productos</a>
+        <a class="nav-link" data-route="ofertas"><i class="bi bi-patch-minus"> </i> Ofertas</a>
+        <a class="nav-link" data-route="usuarios"><i class="bi bi-people"></i> Usuarios</a>
+        <a class="nav-link" data-route="paginas"><i class="bi bi-book"></i> Páginas</a>
+        <a class="nav-link" data-route="cortes-caja"><i class="bi bi-receipt-cutoff"></i> Cortes de caja</a>
 
       </nav>
 
@@ -50,15 +89,116 @@
   </div>
 </div>
 
+<footer class="mt-auto bg-dark text-secondary text-center p-3 lh-base small">
+    <p class="mb-1">
+      Panel de Administradores · v2.0 · Servidor:
+      <span id="fechaHora"></span>
+    </p>
 
+    <p class="mb-1">
+      Desarrollado por
+      <a href="https://github.com/Rendel05"
+         class="fw-bold text-primary text-decoration-none"
+         target="_blank" rel="noopener">
+        Pedro M
+      </a>
+      · 2026
+    </p>
 
-<script src="../js/auth.js"></script>
+    <p class="mb-0">
+      © 2026 Rendel 05 — Todos los derechos reservados.
+    </p>
+  </footer>
+ <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="toast-container"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/toast.js"></script>  
+<script src="../js/admin-pages-editor.js"></script>
+<script src="../js/admin-products.js"></script>
+<script src="../js/admin-users.js"></script>
+<script src="../js/admin-offers.js"></script>
+<script src="../js/admin-new-product.js"></script>
+<script src="../js/admin-new-user.js"></script>
+<script src="../js/admin-new-offer.js"></script>
+<script src="../js/admin-cash-outs.js"></script>
+
+<div id="overlay" onclick="toggleSidebar()"></div>
+
 
 <script>
+function toggleSidebar(forceClose = false) {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
 
-checkAuth();
+  if (forceClose) {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    return;
+  }
 
-document.getElementById("logout").addEventListener("click", logout);
+  sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
+}
+
+document.querySelectorAll("#sidebar .nav-link").forEach(link => {
+  link.addEventListener("click", () => {
+    if (window.innerWidth < 768) {
+      toggleSidebar(true);
+    }
+  });
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  
+  const navLinks = document.querySelectorAll('.nav-link[data-route]');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+
+      navLinks.forEach(l => l.classList.remove('active', 'text-white'));
+      
+      e.currentTarget.classList.add('active', 'text-white');
+      
+      const route = e.currentTarget.getAttribute('data-route');
+      
+      if (route === 'productos') {
+        cargarVistaProductos();
+      }
+      else if(route ==='usuarios'){
+        cargarVistaUsuarios();
+      }
+      else if(route ==='ofertas'){
+        cargarVistaOfertas();
+      }  
+      else if(route ==='paginas'){
+        cargarVistaPaginas();
+      }
+      else if(route ==='cortes-caja'){
+        renderCorteCaja();
+      }
+      else {
+        document.getElementById('admin-content').innerHTML = `
+          <h2 class="mt-4 text-muted">Vista de ${route.toUpperCase()} en construcción...</h2>
+        `;
+      }
+    });
+  });
+
+  document.querySelector('[data-route="productos"]').click();
+});
+</script>
+  
+<script>
+  setInterval(()=>{
+  document.getElementById('fechaHora').textContent =
+    new Date().toLocaleString('es-MX');
+},1000);
 
 </script>
 

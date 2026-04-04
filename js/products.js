@@ -1,7 +1,7 @@
 let paginaActual = 1;
 let categoriaActual = null;
 let busquedaActual = null;
-const limite = 10;
+const limite = 12;
 
 const params = new URLSearchParams(window.location.search);
 
@@ -27,7 +27,7 @@ async function cargarCatalogo(){
 
   }else{
 
-    url = `https://backend-punto-de-venta-render.onrender.com/api/products?page=${paginaActual}&limit=${limite}`;
+    url = `https://backend-punto-de-venta-render.onrender.com/api/products/active?page=${paginaActual}&limit=${limite}`;
 
   }
 
@@ -42,7 +42,7 @@ async function cargarCatalogo(){
 
   productos.forEach(prod => {
 
-    const imagen = `../assets/img/logo.png`;
+    const imagen = prod.imagen_url || `../assets/img/default.png`;
 
     const card = document.createElement("div");
 
@@ -63,9 +63,10 @@ async function cargarCatalogo(){
 
           <div class="d-flex justify-content-between">
 
-            <span class="product-price">
-              $${prod.precio_venta}
-            </span>
+            <div class="product-price">
+              ${renderPrecioHTML(prod)}
+            </div>
+            ${renderBadgeHTML(prod)}
 
             <button class="btn btn-sm btn-primary">
               +
@@ -77,7 +78,9 @@ async function cargarCatalogo(){
 
       </div>
     `;
-
+      card.onclick = () => {
+        window.location.href = `./product.html?id=${prod.producto_id}`;
+      }
     grid.appendChild(card);
 
   });
@@ -120,34 +123,44 @@ function renderPaginacion(totalPages){
 }
 
 async function cargarFiltros(){
-
   const res = await fetch("https://backend-punto-de-venta-render.onrender.com/api/categories");
   const categorias = await res.json();
-
   const lista = document.getElementById("filtro-categorias");
 
+  const chipTodos = document.createElement("button");
+  chipTodos.className = "btn btn-sm rounded-pill " + (!categoriaActual ? "btn-primary" : "btn-outline-secondary");
+  chipTodos.textContent = "Todos";
+  chipTodos.onclick = () => {
+    categoriaActual = null;
+    busquedaActual = null;
+    paginaActual = 1;
+    actualizarChipActivo(chipTodos);
+    cargarCatalogo();
+  };
+  lista.appendChild(chipTodos);
+
   categorias.forEach(cat => {
-
-    const li = document.createElement("li");
-
-    li.className = "list-group-item list-group-item-action";
-
-    li.textContent = cat.nombre;
-
-    li.onclick = () => {
-
+    const chip = document.createElement("button");
+    chip.className = "btn btn-sm rounded-pill btn-outline-secondary flex-shrink-0";
+    chip.textContent = cat.nombre;
+    chip.onclick = () => {
       categoriaActual = cat.categoria_id;
       busquedaActual = null;
       paginaActual = 1;
-
+      actualizarChipActivo(chip);
       cargarCatalogo();
-
     };
-
-    lista.appendChild(li);
-
+    lista.appendChild(chip);
   });
+}
 
+function actualizarChipActivo(chipActivo){
+  document.querySelectorAll("#filtro-categorias .btn").forEach(c => {
+    c.classList.remove("btn-primary");
+    c.classList.add("btn-outline-secondary");
+  });
+  chipActivo.classList.add("btn-primary");
+  chipActivo.classList.remove("btn-outline-secondary");
 }
 
 

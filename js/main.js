@@ -115,6 +115,8 @@ async function cargarProductos(){
     const res = await fetch(URL)
     const productos = await res.json()
 
+    registrarProductos(productos);
+
     const contenedor = document.getElementById("productos-scroll")
 
     contenedor.innerHTML = ""
@@ -125,6 +127,7 @@ async function cargarProductos(){
       const card = document.createElement("div")
 
       card.className = "card product-card shadow-sm"
+      card.dataset.product = prod.producto_id;
 
       card.innerHTML = `
         <img src="${imagen}" class="card-img-top" alt="${prod.nombre}">
@@ -137,16 +140,16 @@ async function cargarProductos(){
             ${prod.descripcion || ""}
           </p>
 
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center gap-2">
 
             <div class="product-price">
               ${renderPrecioHTML(prod)}
             </div>
             ${renderBadgeHTML(prod)}
 
-            <button class="btn btn-sm btn-primary">
-              +
-            </button>
+            <div data-cart-zone>
+              ${renderBotonCantidad(prod)}
+            </div>
 
           </div>
 

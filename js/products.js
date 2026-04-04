@@ -36,6 +36,8 @@ async function cargarCatalogo(){
 
   const productos = datos.data || datos;
 
+  registrarProductos(productos);
+
   const grid = document.getElementById("catalogo-grid");
 
   grid.innerHTML = "";
@@ -47,6 +49,7 @@ async function cargarCatalogo(){
     const card = document.createElement("div");
 
     card.className = "col-6 col-md-4 col-lg-3";
+    card.dataset.product = prod.producto_id;
 
     card.innerHTML = `
       <div class="card product-card h-100 shadow-sm">
@@ -61,16 +64,16 @@ async function cargarCatalogo(){
             ${prod.descripcion}
           </p>
 
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between align-items-center gap-2">
 
             <div class="product-price">
               ${renderPrecioHTML(prod)}
             </div>
             ${renderBadgeHTML(prod)}
 
-            <button class="btn btn-sm btn-primary">
-              +
-            </button>
+            <div data-cart-zone>
+              ${renderBotonCantidad(prod)}
+            </div>
 
           </div>
 

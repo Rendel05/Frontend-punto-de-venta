@@ -32,10 +32,19 @@ function normalizarProducto(producto) {
 function agregarAlCarrito(producto) {
   const carrito = getCarrito();
   const idx = carrito.findIndex(item => String(item.producto_id) === String(producto.producto_id));
+  const stock = Number(producto.stock);
 
   if (idx >= 0) {
+    if (Number.isFinite(stock) && carrito[idx].cantidad >= stock) {
+      return carrito;
+    }
+
     carrito[idx].cantidad += 1;
   } else {
+    if (Number.isFinite(stock) && stock <= 0) {
+      return carrito;
+    }
+
     carrito.push(normalizarProducto(producto));
   }
 
@@ -61,7 +70,13 @@ function actualizarCantidad(producto_id, cantidad) {
   if (!Number.isFinite(cantidadNueva) || cantidadNueva <= 0) {
     carrito.splice(idx, 1);
   } else {
-    carrito[idx].cantidad = Math.floor(cantidadNueva);
+    const producto = getProductoEnCatalogo(producto_id);
+    const stock = Number(producto?.stock);
+    const cantidadLimitada = Number.isFinite(stock)
+      ? Math.min(cantidadNueva, stock)
+      : cantidadNueva;
+
+    carrito[idx].cantidad = Math.floor(cantidadLimitada);
   }
 
   saveCarrito(carrito);
@@ -110,12 +125,16 @@ function renderBotonCantidad(producto) {
     `;
   }
 
+  const stock = Number(producto.stock);
+  const maxStockAlcanzado = Number.isFinite(stock) && item.cantidad >= stock;
+
   return `
     <div class="cart-qty-controls" data-product-id="${producto.producto_id}">
       <button class="btn btn-sm btn-outline-secondary btn-minus" data-product-id="${producto.producto_id}">-</button>
       <span class="qty-value">${item.cantidad}</span>
-      <button class="btn btn-sm btn-outline-secondary btn-plus" data-product-id="${producto.producto_id}">+</button>
+      <button class="btn btn-sm btn-outline-secondary btn-plus" data-product-id="${producto.producto_id}" ${maxStockAlcanzado ? "disabled" : ""}>+</button>
     </div>
+    ${maxStockAlcanzado ? '<small class="stock-max-msg d-block mt-1">Stock máximo alcanzado</small>' : ""}
   `;
 }
 

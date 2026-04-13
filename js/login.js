@@ -22,18 +22,27 @@ form.addEventListener("submit", async (e) => {
     if (res.ok) {
 
       localStorage.setItem("token", data.token);
+      let cart=sessionStorage.getItem('redirectAfterLogin')
 
       const payload = JSON.parse(atob(data.token.split('.')[1]));
-
-      switch (payload.rol) {
+      
+      switch (payload.role) {
         case "Admin":
+          sessionStorage.removeItem('redirectAfterLogin')
           window.location.href = "./admin.html";
           break;
         case "Cajero":
+          sessionStorage.removeItem('redirectAfterLogin')
           window.location.href = "./cashier.html";
           break;
         default:
-          window.location.href = "../index.html";
+          if(cart){
+            sessionStorage.removeItem('redirectAfterLogin')
+            window.location.href='./cart.html'
+          }
+          else{
+            window.location.href = "../index.html";
+          }
       }
 
     } else {

@@ -42,7 +42,6 @@ async function cargarVistaUsuarios() {
         <table class="table table-striped table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Alias (Usuario)</th>
               <th scope="col">Rol</th>
               <th scope="col">Estado</th>
@@ -63,7 +62,6 @@ async function cargarVistaUsuarios() {
 
       html += `
         <tr>
-          <td class="fw-normal">${usuario.usuario_id}</td>
           <td class="fw-bold">${usuario.alias}</td>
           <td><span class="badge ${rolBadgeClass}">${usuario.rol}</span></td>
           <td>${estadoBadge}</td>

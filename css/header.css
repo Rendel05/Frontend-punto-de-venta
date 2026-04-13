@@ -42,6 +42,10 @@
   border:none;
   background:none;
 }
+.btn-buscar:focus,
+.btn-buscar:active{
+  background-color: transparent !important;
+}
 
 /* ICONOS Y TEXTO */
 .icon{
@@ -71,16 +75,67 @@
   background-color: transparent;
   border:none;
   cursor:pointer;
+  border-radius: 10px;
 }
 .btn-user.active {
-  background-color: rgba(255,255,255,0.15);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   transition: all 0.2s ease-in-out;
 }
 .btn-user.active {
   transform: scale(0.97);
 }
+
+button.btn-user:hover,
+button.btn-user:focus
+{
+  i{
+    color: var(--text);
+  }
+  span{
+    color: var(--text);
+  }
+  background-color: transparent !important;
+}
+
+button.btn-user:active
+{
+  i{
+    color: var(--bg);
+  }
+  span{
+    color: var(--bg);
+  }
+}
+
+
+button.btn-cart:hover,
+button.btn-cart:focus{
+  i{
+    color: var(--text);
+  }
+  span{
+    color: var(--text);
+  }
+  span.cart-count{
+    background-color: var(--text);
+    color:var(--bg);
+  }
+  background-color: transparent !important;
+}
+
+button.btn-cart:active{
+  i{
+    color: var(--bg);
+  }
+  span{
+    color: var(--bg);
+  }
+  span.cart-count{
+    background-color: var(--bg);
+    color:var(--text);
+  }
+}
+
+
 
 .btn-cart{
   display:flex;
@@ -88,6 +143,7 @@
   align-items:center;
   background-color: transparent;
   border:none;
+  border-radius: 10px;
 }
 
 /* CARRITO */

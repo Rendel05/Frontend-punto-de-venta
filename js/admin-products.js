@@ -50,7 +50,6 @@ try {
         <table class="table table-striped table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th>ID</th>
               <th>Imagen</th>
               <th>Código</th>
               <th>Nombre</th>
@@ -79,7 +78,6 @@ try {
 
       html += `
         <tr>
-          <td>${producto.producto_id}</td>
           <td>
             <img src="${imagenSrc}" alt="${producto.nombre}" 
               class="img-thumbnail" 

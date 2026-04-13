@@ -33,15 +33,15 @@ function renderUserBox() {
       <a href="#" id="logout-btn">Cerrar sesión</a>
     `;
 
-    if (user.rol === "Cliente") {
+    if (user.role === "Cliente") {
       menuOptions += `<a href="${basePath}/profile.html">Mi perfil</a>`;
     }
 
-    if (user.rol === "Admin") {
+    if (user.role === "Admin") {
       menuOptions += `<a href="${basePath}/admin.html">Panel admin</a>`;
     }
 
-    if (user.rol === "Cajero") {
+    if (user.role === "Cajero") {
       menuOptions += `<a href="${basePath}/cashier.html">Caja</a>`;
     }
 

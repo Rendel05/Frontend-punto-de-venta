@@ -1,4 +1,3 @@
-
 const API_URL_PROD = "https://backend-punto-de-venta-render.onrender.com/api/products/";
 const API_URL_REV = "https://backend-punto-de-venta-render.onrender.com/api/reviews/";
 
@@ -6,6 +5,7 @@ function obtenerIdProducto() {
     const params = new URLSearchParams(window.location.search);
     return params.get("id");
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     const id = obtenerIdProducto();
     if (id) {
@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error("No se encontró el ID del producto");
     }
-})
+});
 
+// ===================== PRODUCTO =====================
 
-//Render del producto
 async function cargarDetallesProducto(id) {
     try {
         const res = await fetch(API_URL_PROD + id);
@@ -29,6 +29,7 @@ async function cargarDetallesProducto(id) {
         console.error("Error cargando producto:", error);
     }
 }
+
 function renderProducto(p) {
     document.getElementById("producto-nombre").textContent = p.nombre;
     document.getElementById("producto-descripcion").textContent = p.descripcion;
@@ -59,19 +60,18 @@ function renderProducto(p) {
 
     const zona = card?.querySelector("[data-cart-zone]");
     if (zona) zona.innerHTML = renderBotonCantidad(p);
-
 }
 
+// ===================== RESEÑAS =====================
 
-//Render de las reseñas
 async function cargarResenas(id) {
     try {
         const res = await fetch(API_URL_REV + id);
         const data = await res.json();
-        
+
         document.getElementById("producto-rating").innerHTML = generarEstrellas(data.average);
         document.getElementById("resenas-count").textContent = `(${data.total} reseñas)`;
-        
+
         renderReviews(data.reviews);
     } catch (error) {
         console.error("Error cargando reseñas:", error);
@@ -91,8 +91,8 @@ function renderReviews(reviews) {
         const isOwner = currentUser && currentUser.id === r.cliente_id;
 
         return `
-        <div class="card mb-3 border-0 border-bottom rounded-0 pb-3">
-            <div class="card-body px-0">
+        <div class="card mb-3 border-0 border-bottom rounded-3 pb-3">
+            <div class="card-body px-3">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <strong class="text-capitalize">${r.usuario}</strong>
@@ -106,31 +106,32 @@ function renderReviews(reviews) {
                 <p class="card-text text-secondary">${r.comentario}</p>
             </div>
         </div>
-    `}).join("");
+    `;
+    }).join("");
 }
 
 function renderReviewForm() {
-  const container = document.getElementById("review-form-container");
-  const user = getUserFromToken();
+    const container = document.getElementById("review-form-container");
+    const user = getUserFromToken();
 
-  if (!user) {
-    container.innerHTML = `
+    if (!user) {
+        container.innerHTML = `
       <div class="alert alert-info small">
         Debes iniciar sesión para poder dejar reseñas.
         <br><a href="login.html" class="alert-link">Iniciar sesión</a>
       </div>`;
-    return;
-  }
+        return;
+    }
 
-  if (user.rol !== "Cliente") {
-    container.innerHTML = `
+    if (user.role !== "Cliente") {
+        container.innerHTML = `
       <div class="alert alert-warning small">
         Solo los clientes pueden publicar reseñas.
       </div>`;
-    return;
-  }
+        return;
+    }
 
-  container.innerHTML = `
+    container.innerHTML = `
     <form id="review-form">
       <div class="mb-3">
         <label class="form-label">Calificación</label>
@@ -153,14 +154,34 @@ function renderReviewForm() {
 
 function setupReviewFormHandler(id) {
     const form = document.getElementById("review-form");
-
     if (!form) return;
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const token = localStorage.getItem("token");
-        const comentario = document.getElementById("rev-comment").value;
+        const comentario = document.getElementById("rev-comment").value.trim();
         const calificacion = document.getElementById("rev-rating").value;
+
+        // 🔴 Validación: comentario vacío
+        if (!comentario) {
+            Swal.fire({
+                icon: "warning",
+                title: "Comentario vacío",
+                text: "Por favor escribe un comentario antes de enviar"
+            });
+            return;
+        }
+
+        // 🟡 Validación opcional: longitud mínima
+        if (comentario.length < 5) {
+            Swal.fire({
+                icon: "warning",
+                title: "Comentario muy corto",
+                text: "Escribe al menos 5 caracteres"
+            });
+            return;
+        }
 
         try {
             const res = await fetch(API_URL_REV, {
@@ -177,21 +198,25 @@ function setupReviewFormHandler(id) {
             });
 
             if (res.ok) {
-                    Swal.fire({
+                // 🔹 Limpiar formulario
+                document.getElementById("rev-comment").value = "";
+                document.getElementById("rev-rating").value = "5";
+
+                Swal.fire({
                     icon: "success",
                     title: "Reseña publicada",
                     text: "Tu opinión se guardó correctamente",
                     confirmButtonText: "OK"
-                    }).then(() => {
+                }).then(() => {
                     cargarResenas(obtenerIdProducto());
-                    })
+                });
             } else {
                 const err = await res.json();
-                    Swal.fire({
+                Swal.fire({
                     icon: "error",
                     title: "Error",
                     text: err.message || "No se pudo publicar la reseña"
-                    })
+                });
             }
         } catch (error) {
             console.error("Error:", error);
@@ -207,11 +232,12 @@ async function eliminarResena(reviewId) {
         showCancelButton: true,
         confirmButtonText: "Sí, eliminar",
         cancelButtonText: "Cancelar"
-        });
+    });
 
-        if (!result.isConfirmed) return;
+    if (!result.isConfirmed) return;
 
     const token = localStorage.getItem("token");
+
     try {
         const res = await fetch(`${API_URL_REV}${reviewId}`, {
             method: "DELETE",
@@ -226,32 +252,29 @@ async function eliminarResena(reviewId) {
                 title: "Eliminada",
                 text: "Tu reseña fue eliminada"
             }).then(() => {
-                    cargarResenas(obtenerIdProducto());
+                cargarResenas(obtenerIdProducto());
             });
-            } else {
+        } else {
             Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: "No se pudo eliminar la reseña"
             });
-    }
+        }
     } catch (error) {
         console.error("Error eliminando reseña:", error);
     }
 }
 
-
-
-
-//Helpers
+// ===================== HELPERS =====================
 
 function getUserFromToken() {
-  const token = localStorage.getItem("token");
-  if (!token) return null;
+    const token = localStorage.getItem("token");
+    if (!token) return null;
 
-  try {
-    return JSON.parse(atob(token.split('.')[1]));
-  } catch {
-    return null;
-  }
+    try {
+        return JSON.parse(atob(token.split('.')[1]));
+    } catch {
+        return null;
+    }
 }

@@ -48,7 +48,6 @@ async function cargarVistaOfertas(page = 1) {
         <table class="table table-striped table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th>ID Oferta</th>
               <th>ID Producto</th>
               <th>Producto</th>
               <th>Precio Oferta</th>
@@ -72,7 +71,6 @@ async function cargarVistaOfertas(page = 1) {
 
       html += `
         <tr>
-          <td class="fw-bold">${oferta.oferta_id}</td>
           <td>
             <span class="badge bg-secondary">Prod #${oferta.producto_id}</span>
           </td>

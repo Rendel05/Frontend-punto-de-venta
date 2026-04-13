@@ -1,6 +1,12 @@
 body{
 background:#f6f8fa;
 }
+html::-webkit-scrollbar {
+  display: none;
+}
+main{
+  min-height: 600px;
+}
 
 .sidebar{
 background:#1f2937;

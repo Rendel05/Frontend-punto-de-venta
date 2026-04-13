@@ -25,26 +25,18 @@ function normalizarProducto(producto) {
     nombre: producto.nombre,
     precio_unitario: Number.isFinite(precioFinal) ? precioFinal : 0,
     cantidad: 1,
-    imagen: producto.imagen_url || "../assets/img/default.png"
+    imagen: producto.imagen_url || "../assets/img/default.png",
+    stock: producto.stock
   };
 }
 
 function agregarAlCarrito(producto) {
   const carrito = getCarrito();
   const idx = carrito.findIndex(item => String(item.producto_id) === String(producto.producto_id));
-  const stock = Number(producto.stock);
 
   if (idx >= 0) {
-    if (Number.isFinite(stock) && carrito[idx].cantidad >= stock) {
-      return carrito;
-    }
-
     carrito[idx].cantidad += 1;
   } else {
-    if (Number.isFinite(stock) && stock <= 0) {
-      return carrito;
-    }
-
     carrito.push(normalizarProducto(producto));
   }
 
@@ -70,13 +62,7 @@ function actualizarCantidad(producto_id, cantidad) {
   if (!Number.isFinite(cantidadNueva) || cantidadNueva <= 0) {
     carrito.splice(idx, 1);
   } else {
-    const producto = getProductoEnCatalogo(producto_id);
-    const stock = Number(producto?.stock);
-    const cantidadLimitada = Number.isFinite(stock)
-      ? Math.min(cantidadNueva, stock)
-      : cantidadNueva;
-
-    carrito[idx].cantidad = Math.floor(cantidadLimitada);
+    carrito[idx].cantidad = Math.floor(cantidadNueva);
   }
 
   saveCarrito(carrito);
@@ -116,25 +102,37 @@ function getProductoEnCatalogo(producto_id) {
 function renderBotonCantidad(producto) {
   const carrito = getCarrito();
   const item = carrito.find(p => String(p.producto_id) === String(producto.producto_id));
+  const stock = Number(producto.stock);
 
+  if (!item && stock===0){
+    return `
+      <button class="btn btn-sm btn-primary btn-add btn-init" id="disabled" data-product-id="${producto.producto_id}" style='background-color:var(--orange) !important;
+      border-color:var(--orange) !important;' disabled>
+        <small>No disponible</small>
+      </button>
+    `;
+  }
   if (!item) {
     return `
-      <button class="btn btn-sm btn-primary btn-add" data-product-id="${producto.producto_id}">
+      <button class="btn btn-sm btn-primary btn-add btn-init" data-product-id="${producto.producto_id}">
         Agregar
       </button>
     `;
   }
 
-  const stock = Number(producto.stock);
   const maxStockAlcanzado = Number.isFinite(stock) && item.cantidad >= stock;
 
   return `
     <div class="cart-qty-controls" data-product-id="${producto.producto_id}">
       <button class="btn btn-sm btn-outline-secondary btn-minus" data-product-id="${producto.producto_id}">-</button>
       <span class="qty-value">${item.cantidad}</span>
-      <button class="btn btn-sm btn-outline-secondary btn-plus" data-product-id="${producto.producto_id}" ${maxStockAlcanzado ? "disabled" : ""}>+</button>
+      <button 
+        class="btn btn-sm btn-outline-secondary btn-plus ${maxStockAlcanzado ? 'disabled-btn' : ''}" 
+        data-product-id="${producto.producto_id}"
+        ${maxStockAlcanzado ? "disabled" : ""}
+        title="${maxStockAlcanzado ? 'Stock máximo alcanzado' : ''}"
+      >+</button>
     </div>
-    ${maxStockAlcanzado ? '<small class="stock-max-msg d-block mt-1">Stock máximo alcanzado</small>' : ""}
   `;
 }
 
@@ -236,3 +234,5 @@ if (document.readyState === "loading") {
 } else {
   initCarrito();
 }
+
+

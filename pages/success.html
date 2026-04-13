@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago exitoso</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root{
+      --orange:#f57a3a;
+      --orange-low:#ff983c;
+      --orange-dark:#e8632a;
+      --muted:#6b6b6b;
+      --bg:#f5f7fa;
+      --text:#333;
+
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card-success{
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      background: #fff;
+      text-align: center;
+    }
+
+    .icon{
+      font-size: 4rem;
+      color: #11877d;
+    }
+
+    .title{
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .subtitle{
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .countdown{
+      font-weight: bold;
+      color: var(--orange-dark);
+    }
+
+    .btn-custom{
+      background-color: var(--orange);
+      color: white;
+      border-radius: 10px;
+      padding: 0.6rem 1.5rem;
+      transition: 0.3s;
+    }
+
+    .btn-custom:hover{
+      background-color: var(--orange-dark);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="content" style="display:none;">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+
+        <div class="card-success">
+          <div class="icon"><i class="bi bi-check-circle"></i></div>
+          <div class="title">¡Pago exitoso!</div>
+          <div class="subtitle">Tu compra se ha procesado correctamente.</div>
+
+          <p>Serás redirigido en <span class="countdown" id="countdown">5</span> segundos...</p>
+
+          <a href="../index.html" class="btn btn-custom mt-3">Volver ahora</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+
+    const paymentId = params.get('payment_id');
+    const status = params.get('status');
+    const merchantOrder = params.get('merchant_order_id');
+
+    const preferenceId = params.get('preference-id');
+    const routerRequestId = params.get('router-request-id');
+    const journeyId = params.get('journey-id');
+
+    const validClassic = paymentId && merchantOrder && status === 'approved';
+    const validRedirect = preferenceId && routerRequestId && journeyId;
+
+    if (!validClassic && !validRedirect) {
+      window.location.href = './profile.html';
+    } else {  
+      document.getElementById('content').style.display = 'block';
+
+      localStorage.removeItem('carrito');
+
+      let seconds = 5;
+      const countdownEl = document.getElementById('countdown');
+
+      const interval = setInterval(() => {
+        seconds--;
+        countdownEl.textContent = seconds;
+
+        if(seconds <= 0){
+          clearInterval(interval);
+          window.location.href = './profile.html';
+        }
+      }, 1000);
+    }
+  </script>
+
+
+
+
+</body>
+</html>
+

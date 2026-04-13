@@ -16,7 +16,7 @@ export function getPayload() {
 
 export function getRole() {
   const payload = getPayload();
-  return payload ? payload.rol : null;
+  return payload ? payload.role : null;
 }
 
 export function requireAuth(rolEsperado) {
@@ -28,7 +28,7 @@ export function requireAuth(rolEsperado) {
     return;
   }
 
-  if (rolEsperado && payload.rol !== rolEsperado) {
+  if (rolEsperado && payload.role !== rolEsperado) {
     window.location.href = "./login.html";
   }
 

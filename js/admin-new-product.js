@@ -84,39 +84,44 @@ function activarFormProducto(productId = null) {
   const form = document.getElementById("form-producto");
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const token = localStorage.getItem("token");
-    const formData = new FormData(form);
+  const token = localStorage.getItem("token");
+  const formData = new FormData(form);
 
-    
-    const method = productId ? "PUT" : "POST";
-    const url = productId
-        ? `${API_BASE}/products/${productId}`
-        : `${API_BASE}/products`;
+  const method = productId ? "PUT" : "POST";
+  const url = productId
+    ? `${API_BASE}/products/${productId}`
+    : `${API_BASE}/products`;
 
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    let data;
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        mostrarToast(productId ? "Producto actualizado" : "Producto creado", "success");
-        setTimeout(() => { window.location.href = "admin.html"; }, 1200);
-      } else {
-        mostrarToast(data.message || "Error al guardar", "danger");
-      }
-    } catch (error) {
-      console.error(error);
-      mostrarToast("Error de conexión", "danger");
+      data = await response.json();
+    } catch {
+      data = {};
     }
-  });
+
+    if (response.ok) {
+      mostrarToast(productId ? "Producto actualizado" : "Producto creado", "success");
+      setTimeout(() => { window.location.href = "admin.html"; }, 1200);
+    } else {
+      mostrarToast(data.message || "Error al guardar", "danger");
+    }
+
+  } catch (error) {
+    console.error(error);
+    mostrarToast("Error de conexión", "danger");
+  }
+});
 
   document.getElementById("btn-cancelar").addEventListener("click", () => {
     window.location.href = "admin.html";
@@ -126,9 +131,13 @@ function activarFormProducto(productId = null) {
 
 async function cargarSelects(producto = null) {
   try {
+    const token = localStorage.getItem('token'); // Recupera tu JWT
+
     const [catsRes, suppRes] = await Promise.all([
       fetch("https://backend-punto-de-venta-render.onrender.com/api/categories"),
-      fetch("https://backend-punto-de-venta-render.onrender.com/api/suppliers")
+      fetch("https://backend-punto-de-venta-render.onrender.com/api/suppliers", {
+        headers: { "Authorization": `Bearer ${token}` }
+      })
     ]);
 
     const categorias = await catsRes.json();
@@ -137,26 +146,11 @@ async function cargarSelects(producto = null) {
     const catSelect = document.getElementById("cat_id");
     const suppSelect = document.getElementById("supp_id");
 
-    catSelect.innerHTML = `<option value="">Selecciona categoría</option>`;
-    suppSelect.innerHTML = `<option value="">Selecciona proveedor</option>`;
+    catSelect.innerHTML = `<option value="">Selecciona categoría</option>` + 
+      categorias.map(cat => `<option value="${cat.categoria_id}" ${producto?.categoria_id == cat.categoria_id ? "selected" : ""}>${cat.nombre}</option>`).join('');
 
-    categorias.forEach(cat => {
-      const selected = producto?.categoria_id == cat.categoria_id ? "selected" : "";
-      catSelect.innerHTML += `
-        <option value="${cat.categoria_id}" ${selected}>
-          ${cat.nombre}
-        </option>
-      `;
-    });
-
-    proveedores.forEach(supp => {
-      const selected = producto?.proveedor_id == supp.proveedor_id ? "selected" : "";
-      suppSelect.innerHTML += `
-        <option value="${supp.proveedor_id}" ${selected}>
-          ${supp.nombre}
-        </option>
-      `;
-    });
+    suppSelect.innerHTML = `<option value="">Selecciona proveedor</option>` + 
+      proveedores.map(supp => `<option value="${supp.proveedor_id}" ${producto?.proveedor_id == supp.proveedor_id ? "selected" : ""}>${supp.nombre}</option>`).join('');
 
   } catch (err) {
     console.error("Error cargando selects:", err);

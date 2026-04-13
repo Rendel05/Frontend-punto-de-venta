@@ -130,16 +130,15 @@ async function cargarProductos(){
 card.dataset.product = prod.producto_id;
 
 card.innerHTML = `
-  <img src="${imagen}" class="card-img-top product-clickable" alt="${prod.nombre}">
+  <img src="${imagen}" class="card-img-top product-clickable" id='product-clickable' alt="${prod.nombre}">
 
   <div class="card-body d-flex flex-column">
 
-    <h6 class="card-title">${prod.nombre}</h6>
+    <h6 class="card-title product-clickable">${prod.nombre}</h6>
 
-    <p class="text-muted small flex-grow-1">
+    <p class="text-muted small flex-grow-1 product-clickable">
       ${prod.descripcion || ""}
     </p>
-
     <div class="d-flex justify-content-between align-items-center gap-2">
 
       <div class="product-price">
@@ -157,12 +156,13 @@ card.innerHTML = `
 `
 
 
-    const img = card.querySelector('.product-clickable');
+    const html = card.querySelectorAll('.product-clickable');
 
-    img.onclick = () => {
-      window.location.href = `./pages/product.html?id=${prod.producto_id}`;
-    };
-
+    html.forEach(element => {
+      element.onclick = () => {
+        window.location.href = `./pages/product.html?id=${prod.producto_id}`;
+      }
+    })
       contenedor.appendChild(card)
 
     })

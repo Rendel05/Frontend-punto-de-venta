@@ -9,7 +9,10 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="../css/admin.css">
+
+
 <script src="https://cdn.tiny.cloud/1/i7lemtqouo2i1wn8r5wq9l0w64qjiqa4u56o4xdoa6cmjep0/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+<script src="../js/admin-predictions.js"></script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
@@ -46,7 +49,7 @@
     <span class="navbar-brand mb-0 h1 d-flex align-items-center">
       <img src="../assets/img/logo.png" style="width: 4rem; margin-right: 1rem;">
       <span style="white-space: normal;">
-        Panel de consulta para Administradores
+        Panel de gestión para Administradores
       </span>
     </span>
 
@@ -113,7 +116,8 @@
   <div id="toast-container"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/toast.js"></script>  
 <script src="../js/admin-pages-editor.js"></script>
@@ -124,6 +128,8 @@
 <script src="../js/admin-new-user.js"></script>
 <script src="../js/admin-new-offer.js"></script>
 <script src="../js/admin-cash-outs.js"></script>
+
+
 
 <div id="overlay" onclick="toggleSidebar()"></div>
 
@@ -183,9 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCorteCaja();
       }
       else {
-        document.getElementById('admin-content').innerHTML = `
-          <h2 class="mt-4 text-muted">Vista de ${route.toUpperCase()} en construcción...</h2>
-        `;
+        initDashboard();
       }
     });
   });

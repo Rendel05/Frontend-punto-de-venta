@@ -60,13 +60,13 @@ async function cargarCatalogo(){
 
           <h6 class="product-clickable">${prod.nombre}</h6>
 
-          <p class="small text-muted flex-grow-1">
+          <p class="small text-muted flex-grow-1 product-clickable">
             ${prod.descripcion}
           </p>
 
-          <div class="d-flex justify-content-between align-items-center gap-2">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
 
-            <div class="product-price">
+            <div class="product-price d-flex flex-column align-items-center">
               ${renderPrecioHTML(prod)}
             </div>
             ${renderBadgeHTML(prod)}
@@ -98,35 +98,48 @@ async function cargarCatalogo(){
 
 }
 
-function renderPaginacion(totalPages){
-
+function renderPaginacion(totalPages) {
   const cont = document.getElementById("paginacion");
-
   cont.innerHTML = "";
 
-  for(let i=1;i<=totalPages;i++){
+  if (totalPages <= 1) return;
 
-    const li = document.createElement("li");
+  const rango = 1;
+  const paginas = [];
 
-    li.className = `page-item ${i === paginaActual ? "active":""}`;
-
-    li.innerHTML = `
-      <a class="page-link">${i}</a>
-    `;
-
-    li.onclick = () => {
-
-      paginaActual = i;
-      cargarCatalogo();
-
-      window.scrollTo({top:0,behavior:"smooth"});
-
-    };
-
-    cont.appendChild(li);
-
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 || 
+      i === totalPages || 
+      (i >= paginaActual - rango && i <= paginaActual + rango)
+    ) {
+      paginas.push(i);
+    } else if (i === paginaActual - rango - 1 || i === paginaActual + rango + 1) {
+      paginas.push("..."); 
+    }
   }
 
+  const paginasFiltradas = paginas.filter((item, index) => paginas.indexOf(item) === index);
+
+  paginasFiltradas.forEach(i => {
+    const li = document.createElement("li");
+    
+    if (i === "...") {
+      li.className = "page-item disabled";
+      li.innerHTML = `<span class="page-link border-0">...</span>`;
+    } else {
+      li.className = `page-item ${i === paginaActual ? "active" : ""}`;
+      li.innerHTML = `<a class="page-link" style="cursor:pointer">${i}</a>`;
+      li.onclick = () => {
+        if (i !== paginaActual) {
+          paginaActual = i;
+          cargarCatalogo();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      };
+    }
+    cont.appendChild(li);
+  });
 }
 
 async function cargarFiltros(){
